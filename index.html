@@ -1,0 +1,299 @@
+<html>
+
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<script>
+    function updatePage() {
+        // fetch data using get request http://localhost:3000/buttonsState
+        var data = fetch("/buttonsState", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then((response) => response.json()).then((data) => {
+            var buttons = Object.keys(data);
+
+            for (let item of buttons) {
+                var form = document.getElementById(item);
+                if (item.includes('RECEIVED_BOOL')) {
+                    var button = form.querySelector('[name=change_but]')
+                    if (data[item].pressed == true) {
+                        button.style.backgroundColor = "#6ed829";
+                        button.value = 'ON'
+                    } else {
+                        button.style.backgroundColor = "#e04141";
+                        button.value = 'OFF'
+                    }
+                } else if (item.includes('RECEIVED_NUM') || item.includes('TEXT')) {
+                    form.querySelector('[type=text').value = data[item].value;
+                }
+
+            }
+        });
+    }
+
+    updatePage();
+
+    function sendForm(event) {
+        event.preventDefault();
+        var form = event.srcElement;
+        var formData = new FormData(form);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "update_values", true);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText !== "OK") {
+                    alert(this.responseText);
+                    return;
+                }
+                updatePage();
+            }
+        };
+        xhr.send(formData);
+    }
+
+</script>
+
+<body>
+    <table class='table' style='font-size: 30px;'>
+        <thead>
+            <tr>
+                <th>Boolean Indicators</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class='active'>
+                <td>Noobix ID</td>
+                <td>Boolean control 1</td>
+                <td>Boolean control 2 </td>
+                <td>Boolean control 3 </td>
+                <td>Boolean control 4</td>
+                <td>Boolean control 5 </td>
+            </tr>
+            <tr class='success'>
+                <td>99999</td>
+                <td>
+                    <form id="RECEIVED_BOOL1" onsubmit="sendForm(event)">
+                        <input type='hidden' name='value2' value=1 size='15'>
+                        <input type='hidden' name='value' value=0 size='15'>
+                        <input type='hidden' name='unit' value=99999>
+                        <input type='hidden' name='column' value=RECEIVED_BOOL1>
+                        <input type='submit' name='change_but'
+                            style=' margin-left: 25%; margin-top: 10%; font-size: 30px; text-align:center; background-color: #e04141'
+                            value=OFF>
+                    </form>
+                </td>
+                <td>
+                    <form id="RECEIVED_BOOL2" onsubmit="sendForm(event)">
+                        <input type='hidden' name='value2' value=1 size='15'>
+                        <input type='hidden' name='value' value=0 size='15'>
+                        <input type='hidden' name='unit' value=99999>
+                        <input type='hidden' name='column' value=RECEIVED_BOOL2>
+                        <input type='submit' name='change_but'
+                            style=' margin-left: 25%; margin-top: 10%; font-size: 30px; text-align:center; background-color: #e04141'
+                            value=OFF>
+                    </form>
+                </td>
+                <td>
+                    <form id="RECEIVED_BOOL3" onsubmit="sendForm(event)">
+                        <input type='hidden' name='value2' value=0 size='15'>
+                        <input type='hidden' name='value' value=1 size='15'>
+                        <input type='hidden' name='unit' value=99999>
+                        <input type='hidden' name='column' value=RECEIVED_BOOL3>
+                        <input type='submit' name='change_but'
+                            style=' margin-left: 25%; margin-top: 10%; font-size: 30px; text-align:center; background-color: #e04141'
+                            value=OFF>
+                    </form>
+                </td>
+                <td>
+                    <form id="RECEIVED_BOOL4" onsubmit="sendForm(event)">
+                        <input type='hidden' name='value2' value=0 size='15'>
+                        <input type='hidden' name='value' value=1 size='15'>
+                        <input type='hidden' name='unit' value=99999>
+                        <input type='hidden' name='column' value=RECEIVED_BOOL4>
+                        <input type='submit' name='change_but'
+                            style=' margin-left: 25%; margin-top: 10%; font-size: 30px; text-align:center; background-color: #e04141'
+                            value=OFF>
+                    </form>
+                </td>
+                <td>
+                    <form id="RECEIVED_BOOL5" onsubmit="sendForm(event)">
+                        <input type='hidden' name='value2' value=0 size='15'>
+                        <input type='hidden' name='value' value=1 size='15'>
+                        <input type='hidden' name='unit' value=99999>
+                        <input type='hidden' name='column' value=RECEIVED_BOOL5>
+                        <input type='submit' name='change_but'
+                            style=' margin-left: 25%; margin-top: 10%; font-size: 30px; text-align:center; background-color: #e04141'
+                            value=OFF>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+
+
+
+
+
+    //Again for the second table for numeric controls. We create the table with all the values from the database
+    <table class='table' style='font-size: 30px;'>
+        <thead>
+            <tr>
+                <th>Numeric controls</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class='active'>
+                <td>CONTROL NUMBER 1</td>
+                <td>CONTROL NUMBER 2</td>
+                <td>CONTROL NUMBER 3</td>
+                <td>CONTROL NUMBER 4 </td>
+                <td>CONTROL NUMBER 5 </td>
+            </tr>
+            <tr class='success'>
+                <td>
+                    <form id="RECEIVED_NUM1" onsubmit="sendForm(event)">
+                        <input type='text' name='value' style='width: 120px;' value=0 size='15'>
+                        <input type='hidden' name='unit' style='width: 120px;' value=99999>
+                        <input type='hidden' name='column' style='width: 120px;' value=RECEIVED_NUM1>
+                        <input type='submit' name='change_but' style='width: 120px; text-align:center;' value='change'>
+                    </form>
+                </td>
+                <td>
+                    <form id="RECEIVED_NUM2" onsubmit="sendForm(event)">
+                        <input type='text' name='value' style='width: 120px;' value=0 size='15'>
+                        <input type='hidden' name='unit' style='width: 120px;' value=99999>
+                        <input type='hidden' name='column' style='width: 120px;' value=RECEIVED_NUM2>
+                        <input type='submit' name='change_but' style='text-align:center' value='change'>
+                    </form>
+                </td>
+                <td>
+                    <form id="RECEIVED_NUM3" onsubmit="sendForm(event)">
+                        <input type='text' name='value' style='width: 120px;' value=0 size='15'>
+                        <input type='hidden' name='unit' style='width: 120px;' value=99999>
+                        <input type='hidden' name='column' style='width: 120px;' value=RECEIVED_NUM3>
+                        <input type='submit' name='change_but' style='text-align:center' value='change'>
+                    </form>
+                </td>
+                <td>
+                    <form id="RECEIVED_NUM4" onsubmit="sendForm(event)">
+                        <input type='text' name='value' style='width: 120px;' value=0 size='15'>
+                        <input type='hidden' name='unit' style='width: 120px;' value=99999>
+                        <input type='hidden' name='column' style='width: 120px;' value=RECEIVED_NUM4>
+                        <input type='submit' name='change_but' style='text-align:center' value='change'>
+                    </form>
+                </td>
+                <td>
+                    <form id="RECEIVED_NUM5" onsubmit="sendForm(event)">
+                        <input type='text' name='value' style='width: 120px;' value=0 size='15'>
+                        <input type='hidden' name='unit' style='width: 120px;' value=99999>
+                        <input type='hidden' name='column' style='width: 120px;' value=RECEIVED_NUM5>
+                        <input type='submit' name='change_but' style='text-align:center' value='change'>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+
+
+
+
+
+
+    //Again for the third table for text send. We create the table with all the values from the database
+    <table class='table' style='font-size: 30px;'>
+        <thead>
+            <tr>
+                <th>Send Text to Noobix</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class='active'>
+                <td>Text</td>
+            </tr>
+            <tr class='success'>
+                <td>
+                    <form id="TEXT_1" onsubmit="sendForm(event)">
+                        <input style='width: 100%;' type='text' name='value' value=Nebune! size='100'>
+                        <input type='hidden' name='unit' value=99999>
+                        <input type='hidden' name='column' value=TEXT_1>
+                        <input type='submit' name='change_but' style='text-align:center' value='Send'>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <hr>
+
+
+    //Again for the forth table.
+    <table class='table' style='font-size: 30px;'>
+        <thead>
+            <tr>
+                <th>Boolean Indicators</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class='active'>
+                <td>Noobix ID</td>
+                <td>Indicator 1</td>
+                <td>Indicator 2 </td>
+                <td>Indicator 3 </td>
+            </tr>
+            <tr class='info'>
+                <td>99999</td>
+                <td>
+                    <span class='label label-success'>Active
+                </td>
+                </span>
+                <td>
+                    <span class='label label-success'>Active
+                </td>
+                </span>
+                <td>
+                    <span class='label label-success'>Active
+                </td>
+                </span>
+            </tr>
+        </tbody>
+    </table>
+
+    //Again for the fifth table.
+    <table class='table' style='font-size: 30px;'>
+        <thead>
+            <tr>
+                <th>Integer Indicators</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class='active'>
+                <td>Received number 1</td>
+                <td>Received number 2</td>
+                <td>Received number 3 </td>
+                <td>Received number 4 </td>
+            </tr>
+            <tr class='info'>
+                <td>327</td>
+                <td>1212</td>
+                <td>3233</td>
+                <td>1313</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
