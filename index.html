@@ -10,6 +10,18 @@
 </head>
 
 <script>
+    window.onload = () => {
+        fetch("/buttonsState", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then((response) => response.json()).then((data) => {
+            if (!Object.keys(data).length) {
+                document.querySelectorAll('[onsubmit*=sendForm]').forEach(item => item.requestSubmit());
+            }
+        });
+    }
     function updatePage() {
         // fetch data using get request http://localhost:3000/buttonsState
         var data = fetch("/buttonsState", {
